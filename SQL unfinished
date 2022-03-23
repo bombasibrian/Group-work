@@ -1,0 +1,114 @@
+DROP TABLE IF EXISTS payment;
+
+DROP TABLE IF EXISTS wallet;
+
+DROP TABLE IF EXISTS transaction;
+
+DROP TABLE IF EXISTS property;
+
+DROP TABLE IF EXISTS host;
+
+DROP TABLE IF EXISTS review;
+
+DROP TABLE IF EXISTS property_unit;
+
+DROP TABLE IF EXISTS host_wallet;
+
+DROP TABLE IF EXISTS customer_wallet;
+
+drop table if exists customer;
+
+ 
+
+CREATE TABLE transaction (
+       transaction_type varchar(200) not null,
+       transaction_id int not null,
+       transaction_date date not null,
+       PRIMARY KEY (transaction_id)
+       )
+      ; -- This works
+
+ 
+
+CREATE TABLE customer (
+       customer_id int not null,
+       customer_first_name varchar(200) not null,
+       customer_last_name varchar(200) not null,
+       customer_phone_number int not null,
+       customer_address_line varchar(200),
+       customer_city varchar(200),
+       customer_zip int,
+       customer_state char(2),
+       primary key (customer_id)
+      )
+     ; -- This works - needs fkey with host and customer ids
+
+ 
+
+CREATE TABLE property (
+       property_id int not null,
+       property_address_line varchar(200) not null,
+       property_city varchar(200) not null,
+       property_zip int not null,
+       proerty_state char(2) not null,
+       property_type varchar(200) not null, -- This might be an fk with property unit
+       ameneties varchar(200),
+       PRIMARY KEY (property_id)
+       )
+      ; -- This works
+
+ 
+
+CREATE TABLE property_unit (
+       private_room boolean, 
+       apartment boolean,
+       house boolean,
+       foreign key (property_id) references property(property_id)-- This may need to be linked to property
+       )
+       ; -- This works
+ 
+
+CREATE table host (
+       host_first_name varchar(200) not null,
+       host_last_name varchar(200) not null,
+       review_count int,
+       host_id int not null,
+       superhost boolean not null,
+       host_language varchar (200),
+       PRIMARY KEY (host_id),
+       foreign key (property_id) references property(property_id)
+       )
+      ; -- This works -- I added the foreign key and it stopped working. Ill work on it.
+
+ 
+
+CREATE TABLE review (
+       review_app varchar(200),
+       review_host varchar(200),
+       foreign key (customer_id) references customer(customer_id),
+       foreign key (host_id) references host(host_id)
+       )-- This needs to be updated. Doesnt work yet.
+      ;
+       
+
+
+CREATE TABLE customer_wallet (
+	customer_balance int not null,
+	foreign key (customer_id) references customer(customer_id)
+	)
+	; -- needs to be revised. Doesnt work yet. Idk why.
+
+CREATE TABLE host_wallet (
+	payment_credit int not null,
+	foreign key (host_id) references host(host_id)
+	) -- doesnt connect to host_id for some reason. needs to be revised.
+ 
+
+CREATE table experience_spot (
+	length int not null,
+	location varchar(200),
+	experience_type varchar(200) not null
+	) -- We can possibly add an experience ID? works but not completed.
+	;
+
+ 
